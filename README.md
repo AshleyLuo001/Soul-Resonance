@@ -8,7 +8,7 @@ game designed for soul app
 
 ### 1️⃣ 安装依赖
 ```bash
-pip install -r requirements_qwen.txt
+pip install -r requirements.txt
 ```
 
 ### 2️⃣ 获取API Key
@@ -75,9 +75,9 @@ response = Generation.call(
 
 ## 📝 使用的文件
 
-- `app_qwen.py` - Qwen版后端（使用这个）
-- `index.html` - 前端界面（通用）
-- `requirements_qwen.txt` - Qwen版依赖
+- `app_qwen.py` - 后端
+- `index.html` - 前端界面
+- `requirements.txt` - 依赖
 
 ---
 
