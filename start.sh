@@ -35,7 +35,7 @@ if [ -z "$DASHSCOPE_API_KEY" ]; then
     echo ""
     echo "请选择一个方式设置API Key："
     echo "1. 运行: export DASHSCOPE_API_KEY='your-key'"
-    echo "2. 或在app_qwen.py中直接修改DASHSCOPE_API_KEY变量"
+    echo "2. 或在app.py中直接修改DASHSCOPE_API_KEY变量"
     echo ""
     echo "💡 如何获取API Key："
     echo "   访问: https://bailian.console.aliyun.com/"
