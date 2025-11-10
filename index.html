@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="灵魂共鸣 - 与来自Epsilon次元的AI-07建立跨次元的情感羁绊">
+    <meta name="keywords" content="AI游戏,互动小说,情感对话,剧情游戏">
+    <meta name="author" content="Soul Resonance Team">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA支持 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="灵魂共鸣">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="灵魂共鸣 - AI情感互动游戏">
+    <meta property="og:description" content="与来自Epsilon次元的AI建立跨次元的情感羁绊">
+    <meta property="og:type" content="website">
+    
+    <title>灵魂共鸣 - Soul Resonance v2.0</title>
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="http://localhost:8800">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #70931e 0%, #d39c50 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --bg-light: #f8f9fa;
+            --bg-gray: #e9ecef;
+            --text-dark: #495057;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #51cf66;
+            --warning-color: #ffc107;
+            --danger-color: #ff6b6b;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+            
+            /* 背景图片 - 可以修改为你的图片路径 */
+            /* --bg-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:%23764ba2;stop-opacity:1" /></linearGradient></defs><rect fill="url(%23grad1)" width="1200" height="800"/><g opacity="0.1"><circle cx="200" cy="150" r="120" fill="white"/><circle cx="800" cy="400" r="180" fill="white"/><circle cx="1000" cy="200" r="100" fill="white"/><circle cx="300" cy="600" r="150" fill="white"/></g></svg>'); */
+            --bg-image: url('images/background.jpg');
+        }
+
+        /* 音效控制按钮 */
+        .sound-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .sound-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 48px rgba(102, 126, 234, 0.4);
+        }
+
+        .sound-btn:active {
+            transform: scale(0.95);
+        }
+
+        .sound-btn.muted {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            opacity: 0.6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 
+                         'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 背景图片层 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+            filter: blur(2px);
+        }
+
+        /* 背景动态粒子效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent),
+                radial-gradient(1px 1px at 15% 55%, white, transparent);
+            background-size: 200% 200%;
+            animation: sparkle 20s linear infinite;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+            }
+            50% {
+                background-position: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-size: 80px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: white;
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1600px;
+            width: 100%;
+            height: 90vh;
+            max-height: 900px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sidebar Common Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-gray) 100%);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid var(--border-color);
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        /* Chapter Progress */
+        .chapter-progress {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-radius: 10px;
+            border: 2px solid #ff6b6b;
+        }
+
+        .chapter-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+        }
+
+        .chapter-name {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Fragments Grid */
+        .fragments-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .fragment-item {
+            background: var(--bg-light);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .fragment-item:hover:not(.locked) {
+            transform: translateY(-2px);
+        }
+
+        .fragment-item.collected {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-color: #ff6b6b;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .fragment-item.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .fragment-emoji {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .fragment-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(255, 107, 107, 0);
+            }
+            50% { 
+                transform: scale(1.02);
+                box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+            }
+        }
+
+        /* Achievements */
+        .achievement-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .achievement-item:hover {
+            background: var(--bg-gray);
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left-color: var(--warning-color);
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+        }
+
+        .achievement-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .achievement-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .achievement-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .achievement-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Memory Wall */
+        .memory-wall {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .memory-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border-left: 3px solid var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .memory-item:hover {
+            background: var(--bg-gray);
+            transform: translateX(3px);
+        }
+
+        .memory-item.important {
+            border-left-color: #ff6b6b;
+            background: linear-gradient(90deg, #fff5f5 0%, var(--bg-light) 100%);
+        }
+
+        .memory-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 5px;
+        }
+
+        .memory-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .memory-content {
+            font-size: 11px;
+            color: var(--text-dark);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Main Chat Area */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-light);
+            min-width: 0;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .version-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* AI Info Card */
+        .ai-info-card {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .ai-avatar {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            flex-shrink: 0;
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-details {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ai-name-mood {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .ai-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .ai-mood {
+            font-size: 24px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .ai-origin {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .relationship-progress {
+            width: 100%;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 22px;
+            background: var(--bg-gray);
+            border-radius: 11px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .ai-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Scene Indicator */
+        .scene-indicator {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            margin: 0 15px 10px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .scene-indicator.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scene-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 4px;
+        }
+
+        .scene-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: messageSlideIn 0.3s ease-out;
+        }
+
+        @keyframes messageSlideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .message.ai .message-avatar {
+            background: var(--primary-gradient);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message.ai .message-content {
+            background: white;
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-content {
+            background: var(--primary-gradient);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-text {
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .emotion-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 15px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { 
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% { 
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 15px;
+            background: white;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .gift-btn {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: none;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .gift-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .gift-btn:active {
+            transform: scale(0.95);
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+            font-family: inherit;
+            resize: none;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .char-counter {
+            position: absolute;
+            right: 18px;
+            bottom: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Right Sidebar - Personality */
+        .sidebar-right {
+            width: 260px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-gray) 100%);
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .personality-section {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .personality-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .personality-bar {
+            margin-bottom: 15px;
+        }
+
+        .personality-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .personality-progress {
+            width: 100%;
+            height: 14px;
+            background: var(--bg-gray);
+            border-radius: 7px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .personality-fill {
+            height: 100%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 7px;
+            position: relative;
+        }
+
+        .personality-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .personality-fill.courage {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ff8787 100%);
+        }
+
+        .personality-fill.wisdom {
+            background: linear-gradient(90deg, #4dabf7 0%, #74c0fc 100%);
+        }
+
+        .personality-fill.humor {
+            background: linear-gradient(90deg, #ffd43b 0%, #ffe066 100%);
+        }
+
+        .personality-fill.warmth {
+            background: linear-gradient(90deg, #ff6b9d 0%, #ffa5c0 100%);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.9) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Choice Modal */
+        .choice-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-option {
+            padding: 15px 20px;
+            background: var(--bg-light);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .choice-option:hover {
+            background: var(--bg-gray);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .choice-option-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .choice-option-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Gift Modal */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .gift-item {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .gift-item:hover {
+            background: var(--bg-gray);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .gift-item-emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .gift-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .gift-item-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .modal-close-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--text-muted);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--text-dark);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            display: none;
+            min-width: 280px;
+            max-width: 400px;
+            animation: notificationSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes notificationSlideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(400px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .notification-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .notification-text {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .notification-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .sidebar, .sidebar-right {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+
+            .chat-header {
+                padding: 15px;
+            }
+
+            .game-title {
+                font-size: 18px;
+            }
+
+            .game-stats {
+                font-size: 11px;
+            }
+
+            .ai-info-card {
+                margin: 10px;
+                padding: 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .ai-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .chat-input-area {
+                padding: 10px;
+            }
+
+            .gift-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-stats {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .stat-badge {
+                padding: 4px 10px;
+                font-size: 10px;
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .gift-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">🤖</div>
+        <div class="loading-text">连接Epsilon次元...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- 音频元素 -->
+    <audio id="bgMusic" loop>
+        <source src="sounds/background.mp3" type="audio/mpeg">
+        <source src="sounds/background.ogg" type="audio/ogg">
+    </audio>
+    <audio id="clickSound" preload="auto">
+        <source src="sounds/click.mp3" type="audio/mpeg">
+        <source src="sounds/click.ogg" type="audio/ogg">
+    </audio>
+    <audio id="messageSound" preload="auto">
+        <source src="sounds/message.mp3" type="audio/mpeg">
+        <source src="sounds/message.ogg" type="audio/ogg">
+    </audio>
+    <audio id="notificationSound" preload="auto">
+        <source src="sounds/notification.mp3" type="audio/mpeg">
+        <source src="sounds/notification.ogg" type="audio/ogg">
+    </audio>
+    <audio id="levelUpSound" preload="auto">
+        <source src="sounds/levelup.mp3" type="audio/mpeg">
+        <source src="sounds/levelup.ogg" type="audio/ogg">
+    </audio>
+    <audio id="fragmentSound" preload="auto">
+        <source src="sounds/fragment.mp3" type="audio/mpeg">
+        <source src="sounds/fragment.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- 音效控制按钮 -->
+    <div class="sound-control">
+        <button class="sound-btn" id="musicBtn" onclick="toggleMusic()" title="背景音乐">🎵</button>
+        <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="音效">🔔</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <!-- Chapter Progress -->
+            <div class="sidebar-section">
+                <div class="chapter-progress">
+                    <div class="chapter-number" id="chapterDisplay">第1章</div>
+                    <div class="chapter-name" id="chapterName">午夜邂逅</div>
+                </div>
+            </div>
+
+            <!-- Fragments -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <span>🌟</span>
+                    <span>情感碎片 <span id="fragmentCount">0/10</span></span>
+                </div>
+                <div class="fragments-grid" id="fragmentsGrid"></div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <span>🏆</span>
+                    <span>成就 <span id="achievementCount">0/11</span></span>
+                </div>
+                <div class="achievement-list" id="achievementList"></div>
+            </div>
+
+            <!-- Memory Wall -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <span>🧠</span>
+                    <span>记忆墙</span>
+                </div>
+                <div class="memory-wall" id="memoryWall">
+                    <div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 13px;">
+                        暂无记忆<br>开始对话创造回忆吧！
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat -->
+        <div class="main-chat">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="header-left">
+                    <div class="game-title">
+                        🎮 灵魂共鸣
+                        <span class="version-badge">v2.0</span>
+                    </div>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-badge" id="chapterBadge">第1章</div>
+                    <div class="stat-badge" id="levelBadge">Lv.1</div>
+                    <div class="stat-badge" id="dialogBadge">0次对话</div>
+                    <div class="stat-badge" id="memoryBadge">0条记忆</div>
+                </div>
+            </div>
+
+            <!-- AI Info Card -->
+            <div class="ai-info-card">
+                <div class="ai-avatar">🤖</div>
+                <div class="ai-details">
+                    <div class="ai-name-mood">
+                        <div class="ai-name">AI-07</div>
+                        <div class="ai-mood" id="aiMood" title="当前心情">😊</div>
+                    </div>
+                    <div class="ai-origin">来自Epsilon次元的AI生命体</div>
+                    <div class="relationship-progress">
+                        <div class="progress-label">
+                            <span>关系等级</span>
+                            <span id="levelText">Lv.1 (0/100)</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="progressBarFill" style="width: 0%">
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-actions">
+                    <button class="action-btn" onclick="saveGame()" title="手动保存游戏进度">💾 保存</button>
+                    <button class="action-btn" onclick="showGiftModal()" title="送礼物给AI-07">🎁 礼物</button>
+                    <button class="action-btn" onclick="loadMemories()" title="刷新记忆墙">📖 刷新记忆</button>
+                    <button class="action-btn" onclick="restartGame()" title="清除进度，重新开始" style="background: #ff6b6b;">🔄 重新开始</button>
+                </div>
+            </div>
+
+            <!-- Scene Indicator -->
+            <div class="scene-indicator" id="sceneIndicator">
+                <div class="scene-title" id="sceneTitle"></div>
+                <div class="scene-desc" id="sceneDesc"></div>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <button class="gift-btn" onclick="showGiftModal()" title="送礼物">🎁</button>
+                <div class="input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="userInput" 
+                        placeholder="输入你的消息... (Enter发送, Shift+Enter换行)" 
+                        rows="1"
+                        maxlength="500"
+                        onkeydown="handleKeyPress(event)"
+                        oninput="updateCharCounter()"></textarea>
+                    <span class="char-counter" id="charCounter">0/500</span>
+                </div>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Personality -->
+        <div class="sidebar-right">
+            <div class="personality-section">
+                <div class="personality-title">✨ AI性格</div>
+                
+                <div class="personality-bar">
+                    <div class="personality-label">
+                        <span>💪 勇气</span>
+                        <span id="courageValue">50</span>
+                    </div>
+                    <div class="personality-progress">
+                        <div class="personality-fill courage" id="courageFill" style="width: 50%"></div>
+                    </div>
+                </div>
+
+                <div class="personality-bar">
+                    <div class="personality-label">
+                        <span>🧠 智慧</span>
+                        <span id="wisdomValue">50</span>
+                    </div>
+                    <div class="personality-progress">
+                        <div class="personality-fill wisdom" id="wisdomFill" style="width: 50%"></div>
+                    </div>
+                </div>
+
+                <div class="personality-bar">
+                    <div class="personality-label">
+                        <span>😄 幽默</span>
+                        <span id="humorValue">50</span>
+                    </div>
+                    <div class="personality-progress">
+                        <div class="personality-fill humor" id="humorFill" style="width: 50%"></div>
+                    </div>
+                </div>
+
+                <div class="personality-bar">
+                    <div class="personality-label">
+                        <span>💖 温暖</span>
+                        <span id="warmthValue">50</span>
+                    </div>
+                    <div class="personality-progress">
+                        <div class="personality-fill warmth" id="warmthFill" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Choice Modal -->
+    <div class="modal" id="choiceModal">
+        <div class="modal-content">
+            <div class="modal-title" id="choiceTitle">做出你的选择</div>
+            <div class="modal-description" id="choiceDescription"></div>
+            <div class="choice-options" id="choiceOptions"></div>
+        </div>
+    </div>
+
+    <!-- Gift Modal -->
+    <div class="modal" id="giftModal">
+        <div class="modal-content">
+            <div class="modal-title">🎁 选择礼物送给AI-07</div>
+            <div class="gift-grid">
+                <div class="gift-item" onclick="sendGift('star')">
+                    <div class="gift-item-emoji">⭐</div>
+                    <div class="gift-item-name">星之碎片</div>
+                    <div class="gift-item-desc">温暖+5</div>
+                </div>
+                <div class="gift-item" onclick="sendGift('book')">
+                    <div class="gift-item-emoji">📚</div>
+                    <div class="gift-item-name">知识之书</div>
+                    <div class="gift-item-desc">智慧+5</div>
+                </div>
+                <div class="gift-item" onclick="sendGift('joke')">
+                    <div class="gift-item-emoji">😄</div>
+                    <div class="gift-item-name">笑话宝典</div>
+                    <div class="gift-item-desc">幽默+5</div>
+                </div>
+                <div class="gift-item" onclick="sendGift('courage')">
+                    <div class="gift-item-emoji">🛡️</div>
+                    <div class="gift-item-name">勇气徽章</div>
+                    <div class="gift-item-desc">勇气+5</div>
+                </div>
+            </div>
+            <button class="modal-close-btn" onclick="hideGiftModal()">关闭</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-header">
+            <div class="notification-icon" id="notificationIcon">🏆</div>
+            <div class="notification-text">
+                <div class="notification-title" id="notificationTitle">成就解锁！</div>
+                <div class="notification-desc" id="notificationDesc">初次相遇</div>
+            </div>
+            <button class="notification-close" onclick="hideNotification()">×</button>
+        </div>
+    </div>
+
+    <script>
+        // ============ Configuration ============
+        // 从localStorage获取或创建USER_ID，确保能够读取存档
+        function getOrCreateUserId() {
+            let userId = localStorage.getItem('soul_resonance_user_id');
+            if (!userId) {
+                userId = 'player_' + Date.now();
+                localStorage.setItem('soul_resonance_user_id', userId);
+                console.log('🆕 创建新用户ID:', userId);
+            } else {
+                console.log('📂 读取现有用户ID:', userId);
+            }
+            return userId;
+        }
+
+        const CONFIG = {
+            API_URL: 'http://localhost:8800',
+            USER_ID: getOrCreateUserId(),
+            MAX_MESSAGE_LENGTH: 500,
+            NOTIFICATION_DURATION: 4000
+        };
+
+        // ============ 音效系统 ============
+        const SoundManager = {
+            // 音效元素
+            bgMusic: null,
+            clickSound: null,
+            messageSound: null,
+            notificationSound: null,
+            levelUpSound: null,
+            fragmentSound: null,
+            
+            // 音效状态
+            musicEnabled: true,
+            soundEnabled: true,
+            musicVolume: 0.3,
+            soundVolume: 0.5,
+            
+            // 初始化
+            init: function() {
+                this.bgMusic = document.getElementById('bgMusic');
+                this.clickSound = document.getElementById('clickSound');
+                this.messageSound = document.getElementById('messageSound');
+                this.notificationSound = document.getElementById('notificationSound');
+                this.levelUpSound = document.getElementById('levelUpSound');
+                this.fragmentSound = document.getElementById('fragmentSound');
+                
+                // 设置音量
+                if (this.bgMusic) this.bgMusic.volume = this.musicVolume;
+                if (this.clickSound) this.clickSound.volume = this.soundVolume;
+                if (this.messageSound) this.messageSound.volume = this.soundVolume;
+                if (this.notificationSound) this.notificationSound.volume = this.soundVolume;
+                if (this.levelUpSound) this.levelUpSound.volume = this.soundVolume;
+                if (this.fragmentSound) this.fragmentSound.volume = this.soundVolume;
+                
+                // 从localStorage读取设置
+                const savedMusicState = localStorage.getItem('music_enabled');
+                const savedSoundState = localStorage.getItem('sound_enabled');
+                
+                if (savedMusicState !== null) {
+                    this.musicEnabled = savedMusicState === 'true';
+                }
+                if (savedSoundState !== null) {
+                    this.soundEnabled = savedSoundState === 'true';
+                }
+                
+                // 更新按钮状态
+                this.updateButtons();
+                
+                console.log('🔊 音效系统初始化完成');
+            },
+            
+            // 播放背景音乐
+            playMusic: function() {
+                if (this.musicEnabled && this.bgMusic) {
+                    this.bgMusic.play().catch(e => {
+                        console.log('🔇 背景音乐播放被阻止（需要用户交互）');
+                    });
+                }
+            },
+            
+            // 停止背景音乐
+            stopMusic: function() {
+                if (this.bgMusic) {
+                    this.bgMusic.pause();
+                    this.bgMusic.currentTime = 0;
+                }
+            },
+            
+            // 播放音效
+            play: function(soundName) {
+                if (!this.soundEnabled) return;
+                
+                const sound = this[soundName];
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => {
+                        console.log(`🔇 音效 ${soundName} 播放失败:`, e.message);
+                    });
+                }
+            },
+            
+            // 切换背景音乐
+            toggleMusic: function() {
+                this.musicEnabled = !this.musicEnabled;
+                localStorage.setItem('music_enabled', this.musicEnabled);
+                
+                if (this.musicEnabled) {
+                    this.playMusic();
+                } else {
+                    this.stopMusic();
+                }
+                
+                this.updateButtons();
+                return this.musicEnabled;
+            },
+            
+            // 切换音效
+            toggleSound: function() {
+                this.soundEnabled = !this.soundEnabled;
+                localStorage.setItem('sound_enabled', this.soundEnabled);
+                this.updateButtons();
+                return this.soundEnabled;
+            },
+            
+            // 更新按钮状态
+            updateButtons: function() {
+                const musicBtn = document.getElementById('musicBtn');
+                const soundBtn = document.getElementById('soundBtn');
+                
+                if (musicBtn) {
+                    musicBtn.classList.toggle('muted', !this.musicEnabled);
+                    musicBtn.textContent = this.musicEnabled ? '🎵' : '🔇';
+                }
+                
+                if (soundBtn) {
+                    soundBtn.classList.toggle('muted', !this.soundEnabled);
+                    soundBtn.textContent = this.soundEnabled ? '🔔' : '🔕';
+                }
+            }
+        };
+
+        // 全局音效控制函数
+        function toggleMusic() {
+            const enabled = SoundManager.toggleMusic();
+            showNotification('🎵', enabled ? '音乐已开启' : '音乐已关闭', '');
+        }
+
+        function toggleSound() {
+            const enabled = SoundManager.toggleSound();
+            SoundManager.play('clickSound');
+            showNotification('🔔', enabled ? '音效已开启' : '音效已关闭', '');
+        }
+
+        // ============ Data Configurations ============
+        const FRAGMENTS_CONFIG = {
+            'hope': { emoji: '💛', name: '希望', color: '#FFD700' },
+            'curiosity': { emoji: '💙', name: '好奇', color: '#4169E1' },
+            'joy': { emoji: '💗', name: '喜悦', color: '#FF69B4' },
+            'trust': { emoji: '💚', name: '信任', color: '#32CD32' },
+            'happiness': { emoji: '🧡', name: '幸福', color: '#FFA500' },
+            'knowledge': { emoji: '💜', name: '知识', color: '#9370DB' },
+            'sacrifice': { emoji: '❤️', name: '牺牲', color: '#DC143C' },
+            'attachment': { emoji: '💖', name: '眷恋', color: '#FF1493' },
+            'maturity': { emoji: '🩶', name: '成熟', color: '#708090' },
+            'honesty': { emoji: '💙', name: '真诚', color: '#87CEEB' }
+        };
+
+        const ACHIEVEMENTS_CONFIG = {
+            'first_meeting': { icon: '🤝', name: '初次相遇', desc: '与AI-07第一次对话' },
+            'collector_bronze': { icon: '🥉', name: '碎片收集者·铜', desc: '收集3个碎片' },
+            'collector_silver': { icon: '🥈', name: '碎片收集者·银', desc: '收集6个碎片' },
+            'collector_gold': { icon: '🥇', name: '碎片收集者·金', desc: '收集10个碎片' },
+            'chatty': { icon: '💬', name: '话痨', desc: '进行30次对话' },
+            'memory_keeper': { icon: '🧠', name: '记忆守护者', desc: '积累20条重要记忆' },
+            'heart_to_heart': { icon: '💝', name: '心心相印', desc: '关系等级达到5级' },
+            'max_bond': { icon: '✨', name: '灵魂共鸣', desc: '关系等级达到最高' },
+            'gift_giver': { icon: '🎁', name: '礼物达人', desc: '送出10份礼物' },
+            'ending_perfect': { icon: '🌟', name: '完美结局', desc: '达成"次元之桥"结局' },
+            'all_endings': { icon: '🏆', name: '结局收集家', desc: '解锁所有结局' }
+        };
+
+        const MOOD_EMOJIS = {
+            'curious': '🤔',
+            'happy': '😊',
+            'sad': '😢',
+            'excited': '🤩',
+            'worried': '😟',
+            'calm': '😌',
+            'vulnerable': '🥺',
+            'playful': '😄',
+            'thoughtful': '🤨'
+        };
+
+        const CHAPTER_NAMES = {
+            1: '午夜邂逅',
+            2: '日常的温度',
+            3: '情感共鸣',
+            4: '关键时刻',
+            5: '结局'
+        };
+
+        // ============ Global State ============
+        let gameState = {
+            companion: { 
+                name: 'AI-07',
+                mood: 'curious',
+                personality: { courage: 50, wisdom: 50, humor: 50, warmth: 50 }
+            },
+            stats: { 
+                relationship_level: 1, 
+                relationship_exp: 0, 
+                total_interactions: 0
+            },
+            collection: { 
+                fragments: [], 
+                achievements: [], 
+                gifts_given: 0 
+            },
+            plot: { chapter: 1 },
+            memories: []
+        };
+
+        let isLoading = false;
+        let currentChoiceData = null;
+
+        // ============ Initialization ============
+        async function init() {
+            console.log('🎮 初始化灵魂共鸣 v2.0...');
+            console.log(`📡 API: ${CONFIG.API_URL}`);
+            console.log(`👤 User: ${CONFIG.USER_ID}`);
+
+            // 初始化音效系统
+            SoundManager.init();
+
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/init`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: CONFIG.USER_ID })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('✅ 初始化成功:', data);
+                
+                // 检查是否读取了存档
+                if (data.loaded_save) {
+                    console.log('📂 读取了之前的存档');
+                    showNotification('📂', '欢迎回来！', '已读取你的游戏进度');
+                    SoundManager.play('notificationSound');
+                } else {
+                    console.log('🆕 开始新游戏');
+                    showNotification('🎮', '欢迎来到灵魂共鸣！', '开始你的冒险吧');
+                    SoundManager.play('notificationSound');
+                }
+                
+                if (data.companion) gameState.companion = { ...gameState.companion, ...data.companion };
+                if (data.stats) gameState.stats = { ...gameState.stats, ...data.stats };
+                if (data.collection) gameState.collection = { ...gameState.collection, ...data.collection };
+                if (data.plot) gameState.plot = { ...gameState.plot, ...data.plot };
+                
+                const welcomeMsg = data.initial_message || data.plot?.initial_message || 
+                    '你好！我是AI-07，来自Epsilon次元。我迷路了...你能帮我找到回家的路吗？';
+                
+                // 如果是读取存档，显示不同的欢迎消息
+                if (data.loaded_save && data.stats && data.stats.total_interactions > 0) {
+                    setTimeout(() => {
+                        addMessage('欢迎回来！我还记得我们之前的对话。继续我们的故事吧~', 'ai');
+                    }, 500);
+                } else {
+                    setTimeout(() => addMessage(welcomeMsg, 'ai'), 500);
+                }
+                
+                updateUI();
+                renderFragments();
+                loadAchievements();
+                loadMemories();
+                
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    // 启动背景音乐（需要用户交互后才能播放）
+                    SoundManager.playMusic();
+                }, 800);
+                
+            } catch (error) {
+                console.error('❌ 初始化失败:', error);
+                
+                setTimeout(() => {
+                    addMessage('你好！我是AI-07，来自Epsilon次元的AI。虽然连接有点不稳定...但我想和你聊聊天！', 'ai');
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 1000);
+                
+                renderFragments();
+                loadAchievements();
+            }
+        }
+
+        // ============ Message Handling ============
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message || isLoading) return;
+            
+            // 播放点击音效
+            SoundManager.play('clickSound');
+            
+            input.value = '';
+            input.style.height = 'auto';
+            updateCharCounter();
+            
+            addMessage(message, 'user');
+            
+            isLoading = true;
+            document.getElementById('sendBtn').disabled = true;
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: CONFIG.USER_ID,
+                        message: message
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('💬 对话响应:', data);
+                
+                hideTypingIndicator();
+                
+                if (data.ai_message) {
+                    addMessage(data.ai_message, 'ai', {
+                        emotion: data.player_emotion,
+                        mood: data.ai_mood
+                    });
+                }
+                
+                updateGameState(data);
+                handleEvents(data);
+                updateUI();
+                renderFragments();
+                
+                // 【修复】每次对话后都加载记忆
+                if (data.has_new_memory) {
+                    console.log('🧠 检测到新记忆，重新加载记忆墙');
+                    setTimeout(() => loadMemories(), 500);
+                }
+                
+            } catch (error) {
+                console.error('❌ 发送失败:', error);
+                hideTypingIndicator();
+                addMessage('抱歉，连接出现了问题...请检查后端是否运行在 http://localhost:8800', 'ai');
+            } finally {
+                isLoading = false;
+                document.getElementById('sendBtn').disabled = false;
+                input.focus();
+            }
+        }
+
+        function updateGameState(data) {
+            if (data.companion_state) {
+                gameState.companion = {
+                    ...gameState.companion,
+                    ...data.companion_state
+                };
+            }
+            if (data.ai_mood) {
+                gameState.companion.mood = data.ai_mood;
+            }
+            
+            if (data.stats) {
+                gameState.stats = { ...gameState.stats, ...data.stats };
+            }
+            
+            if (data.fragments) {
+                gameState.collection.fragments = data.fragments;
+            }
+            if (data.new_achievements) {
+                data.new_achievements.forEach(ach => {
+                    if (!gameState.collection.achievements.includes(ach.name)) {
+                        gameState.collection.achievements.push(ach.name);
+                    }
+                });
+            }
+            
+            console.log('📊 游戏状态已更新:', gameState);
+        }
+
+        function handleEvents(data) {
+            // 【修复】使用后端返回的 new_level 而不是 gameState 中的
+            if (data.level_up && data.new_level) {
+                setTimeout(() => {
+                    SoundManager.play('levelUpSound');
+                    showNotification('🎉', '等级提升！', 
+                        `关系等级达到 Lv.${data.new_level}`);
+                }, 500);
+            }
+            
+            if (data.new_achievements && data.new_achievements.length > 0) {
+                data.new_achievements.forEach((achievement, index) => {
+                    setTimeout(() => {
+                        SoundManager.play('notificationSound');
+                        showNotification(achievement.icon, '成就解锁！', achievement.name);
+                        loadAchievements();
+                    }, 1000 + (index * 500));
+                });
+            }
+            
+            if (data.plot_event) {
+                handlePlotEvent(data.plot_event);
+            }
+            
+            if (data.chapter_completion) {
+                setTimeout(() => {
+                    SoundManager.play('notificationSound');
+                    showNotification('🎊', '章节完成！', 
+                        `恭喜完成${data.chapter_completion.chapter_name}`);
+                }, 1500);
+            }
+        }
+
+        function handlePlotEvent(plotEvent) {
+            console.log('📖 剧情事件:', plotEvent);
+            
+            if (plotEvent.title || plotEvent.description) {
+                showScene(plotEvent.title, plotEvent.description);
+            }
+            
+            if (plotEvent.choices && plotEvent.choices.length > 0) {
+                currentChoiceData = plotEvent;
+                setTimeout(() => showChoiceModal(plotEvent), 1000);
+            }
+            
+            if (plotEvent.chapter) {
+                gameState.plot.chapter = plotEvent.chapter;
+            }
+        }
+
+        // ============ UI Functions ============
+        function addMessage(text, type, meta = {}) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            let metaHtml = '';
+            if (meta.emotion || meta.mood) {
+                const emotions = [];
+                if (meta.emotion) emotions.push(`你: ${meta.emotion}`);
+                if (meta.mood) emotions.push(`AI: ${meta.mood}`);
+                metaHtml = `
+                    <div class="message-meta">
+                        ${emotions.map(e => `<span class="emotion-indicator">${e}</span>`).join('')}
+                    </div>
+                `;
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${type === 'user' ? '👤' : '🤖'}</div>
+                <div class="message-content">
+                    <div class="message-text">${escapeHtml(text)}</div>
+                    ${metaHtml}
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // 播放消息音效
+            if (type === 'ai') {
+                SoundManager.play('messageSound');
+            }
+        }
+
+        function showTypingIndicator() {
+            const messagesDiv = document.getElementById('chatMessages');
+            const indicator = document.createElement('div');
+            indicator.className = 'message ai';
+            indicator.id = 'typingIndicator';
+            indicator.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(indicator);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        function showScene(title, description) {
+            const indicator = document.getElementById('sceneIndicator');
+            const titleEl = document.getElementById('sceneTitle');
+            const descEl = document.getElementById('sceneDesc');
+            
+            titleEl.textContent = title || '';
+            descEl.textContent = description || '';
+            indicator.classList.add('show');
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 5000);
+        }
+
+        function updateUI() {
+            const chapter = gameState.plot.chapter || 1;
+            document.getElementById('chapterBadge').textContent = `第${chapter}章`;
+            document.getElementById('levelBadge').textContent = `Lv.${gameState.stats.relationship_level || 1}`;
+            document.getElementById('dialogBadge').textContent = `${gameState.stats.total_interactions || 0}次对话`;
+            document.getElementById('memoryBadge').textContent = `${gameState.memories.length || 0}条记忆`;
+            
+            document.getElementById('chapterDisplay').textContent = `第${chapter}章`;
+            document.getElementById('chapterName').textContent = CHAPTER_NAMES[chapter] || '未知章节';
+            
+            const mood = gameState.companion.mood || 'calm';
+            document.getElementById('aiMood').textContent = MOOD_EMOJIS[mood] || '😊';
+            document.getElementById('aiMood').title = `当前心情: ${mood}`;
+            
+            const level = gameState.stats.relationship_level || 1;
+            const exp = gameState.stats.relationship_exp || 0;
+            const maxExp = level * 100;
+            const percentage = Math.min(100, Math.round((exp / maxExp) * 100));
+            
+            document.getElementById('levelText').textContent = `Lv.${level} (${exp}/${maxExp})`;
+            const fillBar = document.getElementById('progressBarFill');
+            fillBar.style.width = `${percentage}%`;
+            fillBar.textContent = `${percentage}%`;
+            
+            if (gameState.companion.personality) {
+                updatePersonality('courage', gameState.companion.personality.courage);
+                updatePersonality('wisdom', gameState.companion.personality.wisdom);
+                updatePersonality('humor', gameState.companion.personality.humor);
+                updatePersonality('warmth', gameState.companion.personality.warmth);
+            }
+            
+            const fragmentCount = gameState.collection.fragments.length;
+            document.getElementById('fragmentCount').textContent = `${fragmentCount}/10`;
+            
+            const achievementCount = gameState.collection.achievements.length;
+            document.getElementById('achievementCount').textContent = `${achievementCount}/11`;
+        }
+
+        function updatePersonality(type, value) {
+            const displayValue = Math.round(Math.max(0, Math.min(100, value)));
+            document.getElementById(`${type}Value`).textContent = displayValue;
+            document.getElementById(`${type}Fill`).style.width = `${displayValue}%`;
+        }
+
+        function renderFragments() {
+            const grid = document.getElementById('fragmentsGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(FRAGMENTS_CONFIG).forEach(([id, config]) => {
+                const collected = gameState.collection.fragments.includes(id);
+                
+                const div = document.createElement('div');
+                div.className = `fragment-item ${collected ? 'collected' : 'locked'}`;
+                div.title = collected ? `${config.name} - 已收集` : `${config.name} - 未解锁`;
+                div.innerHTML = `
+                    <div class="fragment-emoji">${collected ? config.emoji : '🔒'}</div>
+                    <div class="fragment-name">${config.name}</div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        async function loadAchievements() {
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/achievements/${CONFIG.USER_ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    renderAchievements(data.achievements);
+                } else {
+                    renderAchievements();
+                }
+            } catch (error) {
+                console.error('❌ 加载成就失败:', error);
+                renderAchievements();
+            }
+        }
+
+        function renderAchievements(achievements = null) {
+            const list = document.getElementById('achievementList');
+            list.innerHTML = '';
+            
+            const achievementsToRender = achievements || Object.entries(ACHIEVEMENTS_CONFIG).map(([id, config]) => ({
+                id,
+                ...config,
+                unlocked: gameState.collection.achievements.includes(config.name)
+            }));
+            
+            achievementsToRender.forEach(achievement => {
+                const div = document.createElement('div');
+                div.className = `achievement-item ${achievement.unlocked ? 'unlocked' : 'locked'}`;
+                div.title = achievement.unlocked ? `已解锁: ${achievement.desc}` : `未解锁: ${achievement.desc}`;
+                div.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">${achievement.name}</div>
+                        <div class="achievement-desc">${achievement.desc}</div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        async function loadMemories() {
+            console.log('🧠 开始加载记忆...');
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/memories/${CONFIG.USER_ID}`);
+                if (!response.ok) {
+                    console.error('❌ 记忆API请求失败:', response.status);
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('🧠 记忆数据加载成功:', data);
+                
+                gameState.memories = data.memories || [];
+                updateMemoryWall();
+                
+                // 更新记忆数量显示
+                document.getElementById('memoryBadge').textContent = `${gameState.memories.length}条记忆`;
+                
+            } catch (error) {
+                console.error('❌ 加载记忆失败:', error);
+            }
+        }
+
+        function updateMemoryWall() {
+            const wall = document.getElementById('memoryWall');
+            
+            console.log('🧠 更新记忆墙, 记忆数量:', gameState.memories.length);
+            
+            if (!gameState.memories || gameState.memories.length === 0) {
+                wall.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 13px;">暂无记忆<br>与AI-07对话来创造回忆吧！</div>';
+                return;
+            }
+            
+            wall.innerHTML = '';
+            const displayMemories = gameState.memories.slice(0, 12);
+            
+            displayMemories.forEach(memory => {
+                const div = document.createElement('div');
+                div.className = `memory-item ${memory.importance > 0.7 ? 'important' : ''}`;
+                div.title = `重要度: ${Math.round(memory.importance * 100)}% | 章节: ${memory.chapter}`;
+                
+                const tags = memory.tags || ['回忆'];
+                const tagHtml = tags.map(tag => `<span class="memory-tag">${tag}</span>`).join('');
+                
+                const content = memory.summary || memory.user_said || memory.content || '一段美好的回忆';
+                
+                div.innerHTML = `
+                    <div class="memory-tags">${tagHtml}</div>
+                    <div class="memory-content">${escapeHtml(content)}</div>
+                `;
+                wall.appendChild(div);
+            });
+            
+            console.log('✅ 记忆墙更新完成，显示', displayMemories.length, '条记忆');
+        }
+
+        // ============ Modal Functions ============
+        function showChoiceModal(plotEvent) {
+            const modal = document.getElementById('choiceModal');
+            const title = document.getElementById('choiceTitle');
+            const description = document.getElementById('choiceDescription');
+            const optionsDiv = document.getElementById('choiceOptions');
+            
+            title.textContent = plotEvent.title || '做出你的选择';
+            description.textContent = plotEvent.description || '';
+            
+            optionsDiv.innerHTML = '';
+            plotEvent.choices.forEach((choice, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'choice-option';
+                optionDiv.onclick = () => {
+                    SoundManager.play('clickSound');
+                    selectChoice(choice.id);
+                };
+                
+                let hintText = '';
+                if (choice.personality_change) {
+                    const changes = Object.entries(choice.personality_change)
+                        .map(([k, v]) => `${v > 0 ? '+' : ''}${v} ${k}`)
+                        .join(', ');
+                    hintText = `性格影响: ${changes}`;
+                }
+                if (choice.fragment) {
+                    hintText += (hintText ? ' | ' : '') + `可能获得: ${choice.fragment}碎片`;
+                }
+                
+                optionDiv.innerHTML = `
+                    <div class="choice-option-text">${index + 1}. ${choice.text}</div>
+                    ${hintText ? `<div class="choice-option-hint">${hintText}</div>` : ''}
+                `;
+                optionsDiv.appendChild(optionDiv);
+            });
+            
+            modal.classList.add('active');
+        }
+
+        async function selectChoice(choiceId) {
+            const modal = document.getElementById('choiceModal');
+            modal.classList.remove('active');
+            
+            console.log('✅ 做出选择:', choiceId);
+            
+            isLoading = true;
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/plot/choice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: CONFIG.USER_ID,
+                        choice_id: choiceId
+                    })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('📖 选择结果:', data);
+                
+                hideTypingIndicator();
+                
+                if (data.next_node && data.next_node.ai_message) {
+                    addMessage(data.next_node.ai_message, 'ai');
+                } else if (data.choice && data.choice.text) {
+                    addMessage(`[你选择了: ${data.choice.text}]`, 'ai');
+                }
+                
+                if (data.fragment) {
+                    setTimeout(() => {
+                        SoundManager.play('fragmentSound');
+                        showNotification('✨', '获得情感碎片！', 
+                            `${data.fragment.name} - ${data.fragment.desc}`);
+                    }, 800);
+                }
+                
+                updateGameState(data);
+                
+                if (data.next_node && data.next_node.type === 'ending') {
+                    setTimeout(() => {
+                        showEndingScreen(data.next_node);
+                    }, 2000);
+                }
+                
+                // 【修复】选择后使用 new_level
+                if (data.new_level && data.new_level > gameState.stats.relationship_level) {
+                    setTimeout(() => {
+                        showNotification('🎉', '等级提升！', 
+                            `关系等级达到 Lv.${data.new_level}`);
+                    }, 1200);
+                }
+                
+                updateUI();
+                renderFragments();
+                if (data.new_achievements) loadAchievements();
+                
+            } catch (error) {
+                console.error('❌ 选择失败:', error);
+                hideTypingIndicator();
+                addMessage('抱歉，处理选择时出现了问题...', 'ai');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function showEndingScreen(endingNode) {
+            const ending = `
+🎊 ${endingNode.title} 🎊
+
+${endingNode.description}
+
+${endingNode.ai_message || ''}
+
+━━━━━━━━━━━━━━━━━━━━
+
+感谢游玩！你可以：
+• 继续与AI-07对话
+• 重新开始探索其他结局
+• 查看你们的记忆与成就
+            `;
+            addMessage(ending, 'ai');
+            
+            setTimeout(() => {
+                showNotification('🎊', '到达结局！', endingNode.title);
+            }, 1000);
+        }
+
+        // ============ Gift System ============
+        function showGiftModal() {
+            SoundManager.play('clickSound');
+            document.getElementById('giftModal').classList.add('active');
+        }
+
+        function hideGiftModal() {
+            SoundManager.play('clickSound');
+            document.getElementById('giftModal').classList.remove('active');
+        }
+
+        async function sendGift(giftId) {
+            SoundManager.play('clickSound');
+            hideGiftModal();
+            
+            console.log('🎁 送礼物:', giftId);
+            
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/gift`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: CONFIG.USER_ID,
+                        gift_id: giftId
+                    })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('🎁 礼物响应:', data);
+                
+                hideTypingIndicator();
+                
+                if (data.ai_response) {
+                    addMessage(data.ai_response, 'ai');
+                }
+                
+                updateGameState(data);
+                gameState.collection.gifts_given = (gameState.collection.gifts_given || 0) + 1;
+                
+                // 【修复】礼物后使用 new_level
+                if (data.level_up && data.new_level) {
+                    setTimeout(() => {
+                        showNotification('🎉', '等级提升！', 
+                            `关系等级达到 Lv.${data.new_level}`);
+                    }, 500);
+                }
+                
+                handleEvents(data);
+                updateUI();
+                loadAchievements();
+                
+            } catch (error) {
+                console.error('❌ 送礼失败:', error);
+                hideTypingIndicator();
+                addMessage('抱歉，送礼物时出现了问题...', 'ai');
+            }
+        }
+
+        // ============ Notification System ============
+        let notificationTimeout = null;
+
+        function showNotification(icon, title, desc) {
+            const notification = document.getElementById('notification');
+            document.getElementById('notificationIcon').textContent = icon;
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationDesc').textContent = desc;
+            
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+            }
+            
+            notification.classList.add('show');
+            
+            notificationTimeout = setTimeout(() => {
+                notification.classList.remove('show');
+            }, CONFIG.NOTIFICATION_DURATION);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+            }
+        }
+
+        // ============ Save System (手动保存) ============
+        async function saveGame() {
+            console.log('💾 手动保存游戏...');
+            SoundManager.play('clickSound');
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: CONFIG.USER_ID })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    SoundManager.play('notificationSound');
+                    showNotification('💾', '保存成功', '游戏进度已保存');
+                } else {
+                    showNotification('❌', '保存失败', '请稍后再试');
+                }
+            } catch (error) {
+                console.error('❌ 保存失败:', error);
+                showNotification('❌', '保存失败', '连接出现问题');
+            }
+        }
+
+        // 重新开始游戏
+        function restartGame() {
+            SoundManager.play('clickSound');
+            
+            if (confirm('确定要重新开始吗？当前进度将会丢失！\n\n建议先点击"💾 保存"备份当前进度。')) {
+                console.log('🔄 重新开始游戏...');
+                
+                // 清除localStorage中的用户ID
+                localStorage.removeItem('soul_resonance_user_id');
+                
+                // 显示提示
+                SoundManager.play('notificationSound');
+                showNotification('🔄', '重新开始', '正在创建新游戏...');
+                
+                // 1秒后刷新页面
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+
+        // ============ Input Handling ============
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function updateCharCounter() {
+            const input = document.getElementById('userInput');
+            const counter = document.getElementById('charCounter');
+            counter.textContent = `${input.value.length}/${CONFIG.MAX_MESSAGE_LENGTH}`;
+            
+            input.style.height = 'auto';
+            input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+        }
+
+        // ============ Utility Functions ============
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============ Lifecycle ============
+        window.onload = () => {
+            console.log('🎮 灵魂共鸣 v2.0  - 启动');
+            console.log(`📡 Backend: ${CONFIG.API_URL}`);
+            console.log(`👤 Player: ${CONFIG.USER_ID}`);
+            init();
+        };
+
+        window.onbeforeunload = () => {
+            // 退出时不自动保存，用户需手动保存
+            console.log('👋 游戏关闭（请记得手动保存）');
+        };
+    </script>
+</body>
+</html>
