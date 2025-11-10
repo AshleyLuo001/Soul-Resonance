@@ -1,6 +1,6 @@
 
 
-# 🤖 Soul-Resonance
+# 🤖 Soul-Resonance · 灵魂共鸣
 ![本地图片](./images/封面.jpg "fm")
 
 # 🚀 快速开始
