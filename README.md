@@ -1,7 +1,7 @@
 
 
-# Soul-Resonance
-game designed for soul app
+# 🤖 Soul-Resonance
+![本地图片](./images/封面.jpg "fm")
 
 # 🚀 快速开始
 
@@ -70,7 +70,7 @@ response = Generation.call(
 
 ## 📝 使用的文件
 
-- `app_qwen.py` - 后端
+- `app.py` - 后端
 - `index.html` - 前端界面
 - `requirements.txt` - 依赖
 
