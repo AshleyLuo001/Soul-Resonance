@@ -18,7 +18,7 @@ echo ""
 # 检查是否已安装依赖
 if ! python3 -c "import flask" &> /dev/null; then
     echo "📦 正在安装依赖..."
-    pip3 install -r requirements_qwen.txt
+    pip3 install -r requirements.txt
     echo ""
 fi
 
@@ -48,4 +48,4 @@ echo ""
 echo "🚀 正在启动服务器..."
 echo "使用模型：通义千问 Qwen-Plus"
 echo "================================"
-python3 app_qwen.py
+python3 app.py
